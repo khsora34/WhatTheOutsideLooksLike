@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">I\'m feeling sleepy</string>
+    <string name="app_name">OpenWeather App</string>
     <string name="weather_icon_accessibility">Weather Icon</string>
 </resources>

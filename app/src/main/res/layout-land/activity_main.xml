@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".WeatherGeneralView">
+    tools:context=".WeatherGeneralViewActivity">
 
     <View
         android:id="@+id/top_container_view"
         android:layout_width="wrap_content"
-        android:layout_height="25dp"
+        android:layout_height="28dp"
         android:background="#946EFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
@@ -32,42 +32,46 @@
         android:id="@+id/mainActivityCityTextView"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
         android:gravity="center_vertical"
         android:text="Chicago, Illinois"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/mainActivateTextView"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintBottom_toBottomOf="@+id/top_container_view"
+        app:layout_constraintEnd_toStartOf="@+id/guideline9"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/top_container_view" />
 
     <TextView
         android:id="@+id/mainActivateTextView"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
+        android:layout_marginStart="8dp"
         android:gravity="center_vertical|right"
         android:text="Thu Sep 30 9:51 PM, 2021"
         android:textAlignment="viewStart"
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/top_container_view"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:layout_editor_absoluteY="2dp" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/guideline9"
+        app:layout_constraintTop_toTopOf="@+id/top_container_view" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/hourlyWeatherRecyclerView"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="2dp"
         android:layout_marginEnd="4dp"
-        android:background="#8E93B1"
-        android:orientation="horizontal"
+        android:background="#33FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mainActivityFourthHourTextView" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/mainActivitySunriseTextView"
@@ -95,7 +99,8 @@
         android:id="@+id/mainActivityTemperatureTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="-8dp"
         android:text="72ºF"
         android:textColor="#FFFFFF"
         android:textSize="46sp"
@@ -108,7 +113,8 @@
         android:id="@+id/mainActivityFeelingTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="-4dp"
         android:text="Feels Like 71ºF"
         android:textColor="#FFFFFF"
         android:textSize="16sp"
@@ -156,7 +162,7 @@
         android:id="@+id/mainActivityHumidityTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="6dp"
         android:text="Humidity: 51%"
         android:textColor="#FFFFFF"
         android:textSize="16sp"
@@ -194,19 +200,21 @@
         android:layout_height="wrap_content"
         android:text="66ºF"
         android:textColor="#FFFFFF"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBaseline_toBaselineOf="@+id/mainActivitySecondTemperatureTextView"
         app:layout_constraintEnd_toStartOf="@+id/guideline2"
+        app:layout_constraintHorizontal_bias="0.55"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/mainActivityFirstHourTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="-2dp"
         android:text="8am"
         android:textColor="#FFFFFF"
-        android:textSize="14sp"
+        android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/mainActivityFirstTemperatureTextView"
         app:layout_constraintStart_toStartOf="@+id/mainActivityFirstTemperatureTextView"
@@ -218,7 +226,7 @@
         android:layout_height="wrap_content"
         android:text="72ºF"
         android:textColor="#FFFFFF"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBaseline_toBaselineOf="@+id/mainActivityThirdTemperatureTextView"
         app:layout_constraintEnd_toStartOf="@+id/guideline9"
@@ -228,9 +236,10 @@
         android:id="@+id/mainActivitySecondHourTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="-2dp"
         android:text="1pm"
         android:textColor="#FFFFFF"
-        android:textSize="14sp"
+        android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/mainActivitySecondTemperatureTextView"
         app:layout_constraintStart_toStartOf="@+id/mainActivitySecondTemperatureTextView"
@@ -242,7 +251,7 @@
         android:layout_height="wrap_content"
         android:text="71ºF"
         android:textColor="#FFFFFF"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBaseline_toBaselineOf="@+id/mainActivityFourthTemperatureTextView"
         app:layout_constraintEnd_toStartOf="@+id/guideline6"
@@ -253,9 +262,10 @@
         android:id="@+id/mainActivityThirdHourTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="-2dp"
         android:text="5pm"
         android:textColor="#FFFFFF"
-        android:textSize="14sp"
+        android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/mainActivityThirdTemperatureTextView"
         app:layout_constraintStart_toStartOf="@+id/mainActivityThirdTemperatureTextView"
@@ -265,23 +275,26 @@
         android:id="@+id/mainActivityFourthTemperatureTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
         android:text="68ºF"
         android:textColor="#FFFFFF"
-        android:textSize="24sp"
+        android:textSize="20sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/hourlyWeatherRecyclerView"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.45"
         app:layout_constraintStart_toStartOf="@+id/guideline6"
         app:layout_constraintTop_toBottomOf="@+id/mainActivitySunriseTextView"
+        app:layout_constraintVertical_bias="0.2"
         tools:ignore="TextContrastCheck" />
 
     <TextView
         android:id="@+id/mainActivityFourthHourTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="-2dp"
         android:text="11pm"
         android:textColor="#FFFFFF"
-        android:textSize="14sp"
+        android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/mainActivityFourthTemperatureTextView"
         app:layout_constraintStart_toStartOf="@+id/mainActivityFourthTemperatureTextView"
@@ -293,27 +306,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="206dp" />
+        app:layout_constraintGuide_percent="0.32" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="382dp" />
+        app:layout_constraintGuide_percent="0.54" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="471dp" />
+        app:layout_constraintGuide_percent="0.68" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline9"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="322dp" />
+        app:layout_constraintGuide_percent="0.46" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
