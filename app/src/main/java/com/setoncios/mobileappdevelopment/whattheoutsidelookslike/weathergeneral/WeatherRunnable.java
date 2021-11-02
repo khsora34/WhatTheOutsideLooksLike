@@ -1,13 +1,15 @@
-package com.setoncios.mobileappdevelopment.whattheoutsidelookslike;
+package com.setoncios.mobileappdevelopment.whattheoutsidelookslike.weathergeneral;
 
 import android.net.Uri;
+
+import com.setoncios.mobileappdevelopment.whattheoutsidelookslike.ConnectionHelper;
+import com.setoncios.mobileappdevelopment.whattheoutsidelookslike.DegreeUnit;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 public class WeatherRunnable implements Runnable {
@@ -15,21 +17,23 @@ public class WeatherRunnable implements Runnable {
     private static final String key = "9b9688ec986b42845e1f282ebce725ee";
     private static final String latitudeParam = "lat";
     private static final String longitudeParam = "lon";
-    private static final String appidParam = "appid";
+    private static final String appIdParam = "appid";
     private static final String unitsParam = "units";
     private static final String langParam = "lang";
     private static final String excludeParam = "exclude";
+    private ConnectionHelper connectionHelper;
 
-    private double latitude;
-    private double longitude;
-    private DegreeUnit units;
-    private WeatherGeneralViewActivity mainActivity;
+    private final double latitude;
+    private final double longitude;
+    private final DegreeUnit units;
+    private final WeatherGeneralViewActivity activity;
 
-    WeatherRunnable(double latitude, double longitude, DegreeUnit units, WeatherGeneralViewActivity mainActivity) {
+    WeatherRunnable(double latitude, double longitude, DegreeUnit units, WeatherGeneralViewActivity activity) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.units = units;
-        this.mainActivity = mainActivity;
+        this.activity = activity;
+        this.connectionHelper = new ConnectionHelper(activity);
     }
 
     @Override
@@ -38,39 +42,37 @@ public class WeatherRunnable implements Runnable {
                 .buildUpon()
                 .appendQueryParameter(latitudeParam, String.valueOf(latitude))
                 .appendQueryParameter(longitudeParam, String.valueOf(longitude))
-                .appendQueryParameter(appidParam, key)
+                .appendQueryParameter(appIdParam, key)
                 .appendQueryParameter(unitsParam, units.getApiValue())
                 .appendQueryParameter(langParam, "en")
                 .appendQueryParameter(excludeParam, "minutely")
                 .build();
         String urlString = uri.toString();
-
         StringBuilder builder = new StringBuilder();
-
         try {
             URL url = new URL(urlString);
-
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
-            connection.connect();
-
-            if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+            if (!connectionHelper.hasNetworkConnection()) {
+                this.activity.receiveData(null);
                 return;
             }
-
+            connection.connect();
+            if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
+                // TODO: Add error handle.
+                return;
+            }
             InputStream stream = connection.getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-
             String line;
             while((line = reader.readLine()) != null) {
                 builder.append(line);
             }
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+            this.activity.runOnUiThread(() -> {
+                this.activity.receiveData(builder.toString());
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println(builder.toString());
     }
 }

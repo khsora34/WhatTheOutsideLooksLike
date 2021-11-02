@@ -1,4 +1,31 @@
 <resources>
     <string name="app_name">OpenWeather App</string>
     <string name="weather_icon_accessibility">Weather Icon</string>
+    <string name="main_feel_like">Feels Like %dº%s</string>
+    <string name="main_default_temperature">%dº%s</string>
+    <string name="main_humidity">Humidity: %d%%</string>
+    <string name="main_uv_index">UV index: %d</string>
+    <string name="main_sunrise">Sunrise: %s</string>
+    <string name="main_sunset">Sunset: %s</string>
+    <string name="main_visibility">Visibility: %s %s</string>
+    <string name="main_wind">Winds: %s at %d %s</string>
+    <string name="main_cell_today">Today</string>
+    <string name="main_wind_gust">Winds: %s at %d %s, gusts at %d %s</string>
+    <string name="main_description_clouds">%s (%d%% clouds)</string>
+    <string name="main_1pm">1pm</string>
+    <string name="main_8am">8am</string>
+    <string name="main_11pm">11pm</string>
+    <string name="main_5pm">5pm</string>
+    <string name="location_dialog_message">For US locations, enter as \'City\' or \'City,State\'.\n\nFor international locations enter as \'City,Country\'.</string>
+    <string name="location_dialog_title">Enter a Location</string>
+    <string name="generic_ok">OK</string>
+    <string name="generic_cancel">Cancel</string>
+    <string name="error_message_location">Location couldn\'t be loaded</string>
+    <string name="daily_degree_comparation">%dº%s/%dº%s</string>
+    <string name="daily_precipitation">(%d%% precip.)</string>
+    <string name="intent_list">DAILY_LIST</string>
+    <string name="intent_timezone_offset">TIMEZONE_OFFSET</string>
+    <string name="intent_degree_unit">DEGREE_UNIT</string>
+    <string name="intent_location_name">LOCATION_NAME</string>
+    <string name="generic_error_internet">No Internet connection</string>
 </resources>

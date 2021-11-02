@@ -9,8 +9,9 @@
         android:id="@+id/hourlyCellDayTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="2dp"
-        android:text="Today"
+        android:layout_marginEnd="10dp"
         android:textColor="@color/white"
         android:textSize="13sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,9 +23,8 @@
         android:id="@+id/hourlyCellTimeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="11:00 AM"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:textColor="#FFFFFF"
         android:textSize="13sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,8 +34,8 @@
 
     <ImageView
         android:id="@+id/hourlyCellImageView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_height="32dp"
         android:layout_marginStart="12dp"
         android:layout_marginTop="6dp"
         android:layout_marginEnd="12dp"
@@ -43,14 +43,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/hourlyCellTimeTextView"
-        app:srcCompat="@drawable/_04n" />
+        app:srcCompat="@drawable/_04d" />
 
     <TextView
         android:id="@+id/hourlyCellTemperatureTextView"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="4dp"
-        android:text="72ºF"
+        android:layout_marginEnd="10dp"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="13sp"
@@ -60,30 +61,18 @@
 
     <TextView
         android:id="@+id/hourlyCellImageDescriptionTextView"
-        android:layout_width="0dp"
+        android:layout_width="70dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginBottom="2dp"
-        android:text="Broken Clouds"
+        android:maxLines="2"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="13sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/guideline4"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/guideline3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/hourlyCellTemperatureTextView" />
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_begin="12dp" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_end="12dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

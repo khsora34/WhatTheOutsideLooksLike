@@ -1,10 +1,12 @@
-package com.setoncios.mobileappdevelopment.whattheoutsidelookslike;
+package com.setoncios.mobileappdevelopment.whattheoutsidelookslike.weathergeneral;
 
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.setoncios.mobileappdevelopment.whattheoutsidelookslike.R;
 
 public class HourlyWeatherViewHolder extends RecyclerView.ViewHolder {
     TextView dayTextView;
