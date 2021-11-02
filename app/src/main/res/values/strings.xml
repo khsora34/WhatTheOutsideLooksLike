@@ -28,4 +28,8 @@
     <string name="intent_degree_unit">DEGREE_UNIT</string>
     <string name="intent_location_name">LOCATION_NAME</string>
     <string name="generic_error_internet">No Internet connection</string>
+    <string name="shared_prefs_key">MainWeatherPrefs</string>
+    <string name="prefs_degree_key">DEGREE_UNIT</string>
+    <string name="prefs_latitude_key">LATITUDE</string>
+    <string name="prefs_longitude_key">LONGITUDE</string>
 </resources>

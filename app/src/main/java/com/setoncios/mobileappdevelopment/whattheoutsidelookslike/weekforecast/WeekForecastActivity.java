@@ -4,16 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.setoncios.mobileappdevelopment.whattheoutsidelookslike.DegreeUnit;
+import com.setoncios.mobileappdevelopment.whattheoutsidelookslike.dtos.DegreeUnit;
 import com.setoncios.mobileappdevelopment.whattheoutsidelookslike.R;
 import com.setoncios.mobileappdevelopment.whattheoutsidelookslike.dtos.DailyWeatherInfoDTO;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class WeekForecastActivity extends AppCompatActivity {
     private RecyclerView recyclerView;

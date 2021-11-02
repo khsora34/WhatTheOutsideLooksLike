@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.setoncios.mobileappdevelopment.whattheoutsidelookslike.DegreeUnit;
+import com.setoncios.mobileappdevelopment.whattheoutsidelookslike.dtos.DegreeUnit;
 import com.setoncios.mobileappdevelopment.whattheoutsidelookslike.R;
 import com.setoncios.mobileappdevelopment.whattheoutsidelookslike.StringExtension;
 import com.setoncios.mobileappdevelopment.whattheoutsidelookslike.dtos.DailyWeatherInfoDTO;
@@ -16,7 +16,6 @@ import com.setoncios.mobileappdevelopment.whattheoutsidelookslike.dtos.DailyWeat
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Locale;
 
 public class WeekForecastAdapter extends RecyclerView.Adapter<WeekForecastViewHolder> {

@@ -1,4 +1,6 @@
-package com.setoncios.mobileappdevelopment.whattheoutsidelookslike;
+package com.setoncios.mobileappdevelopment.whattheoutsidelookslike.dtos;
+
+import com.setoncios.mobileappdevelopment.whattheoutsidelookslike.R;
 
 public enum DegreeUnit {
     celsius, fahrenheit;

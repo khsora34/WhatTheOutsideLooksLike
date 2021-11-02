@@ -3,7 +3,7 @@ package com.setoncios.mobileappdevelopment.whattheoutsidelookslike.weathergenera
 import android.net.Uri;
 
 import com.setoncios.mobileappdevelopment.whattheoutsidelookslike.ConnectionHelper;
-import com.setoncios.mobileappdevelopment.whattheoutsidelookslike.DegreeUnit;
+import com.setoncios.mobileappdevelopment.whattheoutsidelookslike.dtos.DegreeUnit;
 
 import java.io.BufferedReader;
 import java.io.IOException;

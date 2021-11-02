@@ -5,20 +5,26 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.content.ContentUris;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.text.InputType;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.setoncios.mobileappdevelopment.whattheoutsidelookslike.ConnectionHelper;
-import com.setoncios.mobileappdevelopment.whattheoutsidelookslike.DegreeUnit;
+import com.setoncios.mobileappdevelopment.whattheoutsidelookslike.dtos.DegreeUnit;
 import com.setoncios.mobileappdevelopment.whattheoutsidelookslike.LocationProvider;
 import com.setoncios.mobileappdevelopment.whattheoutsidelookslike.R;
 import com.setoncios.mobileappdevelopment.whattheoutsidelookslike.StringExtension;
@@ -37,7 +43,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 
-public class WeatherGeneralViewActivity extends AppCompatActivity {
+public class WeatherGeneralViewActivity extends AppCompatActivity
+        implements View.OnClickListener {
     private TextView cityTextView;
     private TextView dateTextView;
     private TextView degreeTextView;
@@ -52,14 +59,20 @@ public class WeatherGeneralViewActivity extends AppCompatActivity {
     private TextView secondDegreeTextView;
     private TextView thirdDegreeTextView;
     private TextView fourthDegreeTextView;
+    private TextView firstTimeTextView;
+    private TextView secondTimeTextView;
+    private TextView thirdTimeTextView;
+    private TextView fourthTimeTextView;
     private RecyclerView recyclerView;
     private TextView sunriseTextView;
     private TextView sunsetTextView;
+    private SwipeRefreshLayout swiper;
     private Menu menu;
 
     private HourlyWeatherAdapter adapter;
     private LocationProvider locationProvider;
     private ConnectionHelper connectionHelper;
+    private SharedPreferences sharedPreferences;
 
     private MainWeatherContentDTO dto;
     private final ArrayList<HourlyWeatherInfoDTO> list = new ArrayList<>();
@@ -72,13 +85,27 @@ public class WeatherGeneralViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_main);
         this.loadIds();
+        this.swiper.setOnRefreshListener(this::refresh);
         this.connectionHelper = new ConnectionHelper(this);
         this.locationProvider = new LocationProvider(this);
+        this.loadSharedPreferences();
         this.adapter = new HourlyWeatherAdapter(this.list, this.degreeUnit, this);
         this.recyclerView.setAdapter(this.adapter);
         this.recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         this.cityTextView.setText(locationProvider.getLocationName(this.latitude, this.longitude));
         this.loadData();
+    }
+
+    private void loadSharedPreferences() {
+        this.sharedPreferences = this.getSharedPreferences(getString(R.string.shared_prefs_key), MODE_PRIVATE);
+        String degreeValue = this.sharedPreferences.getString(this.getString(R.string.prefs_degree_key), null);
+        this.degreeUnit = DegreeUnit.celsius.getApiValue().equals(degreeValue) ? DegreeUnit.celsius : DegreeUnit.fahrenheit;
+        if (this.sharedPreferences.contains(this.getString(R.string.prefs_latitude_key))) {
+            this.latitude = this.sharedPreferences.getFloat(this.getString(R.string.prefs_latitude_key), 0);
+        }
+        if (this.sharedPreferences.contains(this.getString(R.string.prefs_longitude_key))) {
+            this.longitude = this.sharedPreferences.getFloat(this.getString(R.string.prefs_longitude_key), 0);
+        }
     }
 
     @Override
@@ -96,10 +123,7 @@ public class WeatherGeneralViewActivity extends AppCompatActivity {
             return false;
         }
         if (item.getItemId() == R.id.menu_item_degree) {
-            this.degreeUnit = this.degreeUnit.toggle();
-            this.updateDegreeMenu();
-            this.adapter.setDegreeUnit(this.degreeUnit);
-            this.loadData();
+            this.didTapOnDegreeButton();
             return true;
         } else if (item.getItemId() == R.id.menu_item_calendar) {
             this.launchWeekForecast();
@@ -110,6 +134,16 @@ public class WeatherGeneralViewActivity extends AppCompatActivity {
         } else {
             return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void didTapOnDegreeButton() {
+        this.degreeUnit = this.degreeUnit.toggle();
+        this.updateDegreeMenu();
+        this.adapter.setDegreeUnit(this.degreeUnit);
+        SharedPreferences.Editor editor = this.sharedPreferences.edit();
+        editor.putString(this.getString(R.string.prefs_degree_key), this.degreeUnit.getApiValue());
+        editor.apply();
+        this.loadData();
     }
 
     public void receiveData(String response) {
@@ -126,29 +160,51 @@ public class WeatherGeneralViewActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onClick(View view) {
+        int position = this.recyclerView.getChildLayoutPosition(view);
+        HourlyWeatherInfoDTO model = this.dto.getHourly()[position];
+        Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
+        builder.appendPath("time");
+        ContentUris.appendId(builder, model.getDt() + this.dto.getTimezoneOffset());
+        Intent intent = new Intent(Intent.ACTION_VIEW)
+                .setData(builder.build());
+        startActivity(intent);
+    }
+
+    private void refresh() {
+        this.loadData();
+        swiper.setRefreshing(false);
+    }
+
     private void loadData() {
         Runnable runnable = new WeatherRunnable(this.latitude, this.longitude, this.degreeUnit, this);
         new Thread(runnable).start();
     }
 
     private void loadIds() {
-        this.cityTextView = findViewById(R.id.mainActivityCityTextView);
-        this.dateTextView = findViewById(R.id.mainActivityTimeTextView);
-        this.degreeTextView = findViewById(R.id.mainActivityTemperatureTextView);
-        this.feelLikeTextView = findViewById(R.id.mainActivityFeelingTextView);
-        this.imageView = findViewById(R.id.mainActivityWeatherImageView);
-        this.descriptionTextView = findViewById(R.id.mainActivityDescriptionTextView);
-        this.windTextView = findViewById(R.id.mainActivityWindTextView);
-        this.humidityTextView = findViewById(R.id.mainActivityHumidityTextView);
-        this.uviTextView = findViewById(R.id.mainActivityUVTextView);
-        this.visibilityTextView = findViewById(R.id.mainActivityVisibilityTextView);
-        this.firstDegreeTextView = findViewById(R.id.mainActivityFirstTemperatureTextView);
-        this.secondDegreeTextView = findViewById(R.id.mainActivitySecondTemperatureTextView);
-        this.thirdDegreeTextView = findViewById(R.id.mainActivityThirdTemperatureTextView);
-        this.fourthDegreeTextView = findViewById(R.id.mainActivityFourthTemperatureTextView);
-        this.recyclerView = findViewById(R.id.hourlyWeatherRecyclerView);
-        this.sunriseTextView = findViewById(R.id.mainActivitySunriseTextView);
-        this.sunsetTextView = findViewById(R.id.mainActivitySunsetTextView);
+        this.cityTextView = this.findViewById(R.id.mainActivityCityTextView);
+        this.dateTextView = this.findViewById(R.id.mainActivityTimeTextView);
+        this.degreeTextView = this.findViewById(R.id.mainActivityTemperatureTextView);
+        this.feelLikeTextView = this.findViewById(R.id.mainActivityFeelingTextView);
+        this.imageView = this.findViewById(R.id.mainActivityWeatherImageView);
+        this.descriptionTextView = this.findViewById(R.id.mainActivityDescriptionTextView);
+        this.windTextView = this.findViewById(R.id.mainActivityWindTextView);
+        this.humidityTextView = this.findViewById(R.id.mainActivityHumidityTextView);
+        this.uviTextView = this.findViewById(R.id.mainActivityUVTextView);
+        this.visibilityTextView = this.findViewById(R.id.mainActivityVisibilityTextView);
+        this.firstDegreeTextView = this.findViewById(R.id.mainActivityFirstTemperatureTextView);
+        this.secondDegreeTextView = this.findViewById(R.id.mainActivitySecondTemperatureTextView);
+        this.thirdDegreeTextView = this.findViewById(R.id.mainActivityThirdTemperatureTextView);
+        this.fourthDegreeTextView = this.findViewById(R.id.mainActivityFourthTemperatureTextView);
+        this.firstTimeTextView = this.findViewById(R.id.mainActivityFirstHourTextView);
+        this.secondTimeTextView = this.findViewById(R.id.mainActivitySecondHourTextView);
+        this.thirdTimeTextView = this.findViewById(R.id.mainActivityThirdHourTextView);
+        this.fourthTimeTextView = this.findViewById(R.id.mainActivityFourthHourTextView);
+        this.recyclerView = this.findViewById(R.id.hourlyWeatherRecyclerView);
+        this.sunriseTextView = this.findViewById(R.id.mainActivitySunriseTextView);
+        this.sunsetTextView = this.findViewById(R.id.mainActivitySunsetTextView);
+        this.swiper = this.findViewById(R.id.swiper);
     }
 
     private void showLocationDialog() {
@@ -173,6 +229,10 @@ public class WeatherGeneralViewActivity extends AppCompatActivity {
             this.latitude = coordinates[0];
             this.longitude = coordinates[1];
             this.cityTextView.setText(editText.getText());
+            SharedPreferences.Editor editor = this.sharedPreferences.edit();
+            editor.putFloat(this.getString(R.string.prefs_latitude_key), (float)this.latitude);
+            editor.putFloat(this.getString(R.string.prefs_longitude_key), (float)this.longitude);
+            editor.apply();
             this.loadData();
         }
     }
@@ -225,6 +285,10 @@ public class WeatherGeneralViewActivity extends AppCompatActivity {
             this.secondDegreeTextView.setText(String.format(getString(R.string.main_default_temperature), (int)this.dto.getDaily()[0].getTemp().getDay(), this.degreeUnit.getViewValue()));
             this.thirdDegreeTextView.setText(String.format(getString(R.string.main_default_temperature), (int)this.dto.getDaily()[0].getTemp().getEve(), this.degreeUnit.getViewValue()));
             this.fourthDegreeTextView.setText(String.format(getString(R.string.main_default_temperature), (int)this.dto.getDaily()[0].getTemp().getNight(), this.degreeUnit.getViewValue()));
+            this.firstTimeTextView.setText(R.string.main_8am);
+            this.secondTimeTextView.setText(R.string.main_1pm);
+            this.thirdTimeTextView.setText(R.string.main_5pm);
+            this.fourthTimeTextView.setText(R.string.main_11pm);
         }
         this.list.clear();
         this.list.addAll(Arrays.asList(this.dto.getHourly()));
@@ -265,7 +329,7 @@ public class WeatherGeneralViewActivity extends AppCompatActivity {
         this.feelLikeTextView.setText("");
         this.humidityTextView.setText("");
         this.uviTextView.setText("");
-        this.imageView.setImageAlpha(0);
+        this.imageView.setImageDrawable(null);
         this.descriptionTextView.setText("");
         this.windTextView.setText("");
         this.visibilityTextView.setText("");
@@ -273,6 +337,10 @@ public class WeatherGeneralViewActivity extends AppCompatActivity {
         this.secondDegreeTextView.setText("");
         this.thirdDegreeTextView.setText("");
         this.fourthDegreeTextView.setText("");
+        this.firstTimeTextView.setText("");
+        this.secondTimeTextView.setText("");
+        this.thirdTimeTextView.setText("");
+        this.fourthTimeTextView.setText("");
         int oldListSize = this.list.size();
         this.list.clear();
         this.adapter.notifyItemRangeRemoved(0, oldListSize);
