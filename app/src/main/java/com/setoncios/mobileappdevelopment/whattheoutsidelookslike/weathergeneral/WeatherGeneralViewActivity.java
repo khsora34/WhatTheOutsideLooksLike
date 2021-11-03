@@ -36,8 +36,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.DecimalFormat;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -166,10 +169,14 @@ public class WeatherGeneralViewActivity extends AppCompatActivity
         HourlyWeatherInfoDTO model = this.dto.getHourly()[position];
         Uri.Builder builder = CalendarContract.CONTENT_URI.buildUpon();
         builder.appendPath("time");
-        ContentUris.appendId(builder, model.getDt() + this.dto.getTimezoneOffset());
+        LocalDateTime ldt =
+                LocalDateTime.ofEpochSecond(this.dto.getTimezoneOffset() + model.getDt(), 0, ZoneOffset.UTC);
+        ZonedDateTime zdt = ldt.atZone(ZoneId.of("America/Chicago"));
+        ContentUris.appendId(builder, zdt.toInstant().toEpochMilli());
         Intent intent = new Intent(Intent.ACTION_VIEW)
                 .setData(builder.build());
         startActivity(intent);
+        //content://com.android.calendar/time/1635879600
     }
 
     private void refresh() {
